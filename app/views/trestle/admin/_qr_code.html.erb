@@ -1,0 +1,18 @@
+<%- @qr = RQRCode::QRCode.new(@instance.provisioning_uri("#{Trestle.config.site_title} (#{@instance.email})"), size: 10, level: :h) %>
+
+<div class="text-center">
+  <p><strong>Scan with Google Authenticator</strong></p>
+
+  <%= @qr.as_svg(
+    offset: 0,
+    color: '000',
+    shape_rendering: 'crispEdges',
+    module_size: 4,
+    standalone: true
+  ).html_safe %>
+
+  <small class="my-2">
+    <%= @instance.otp_secret_key %>
+  </small>
+
+</div>
