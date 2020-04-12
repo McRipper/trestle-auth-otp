@@ -1,6 +1,7 @@
 require "trestle/auth/otp/version"
 
 require "trestle"
+require "trestle/auth"
 
 require "active_model_otp"
 require "rqrcode"

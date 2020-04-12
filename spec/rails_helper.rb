@@ -5,6 +5,8 @@ ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('dummy/config/environment', __dir__)
 
 require 'rspec/rails'
+require 'show_me_the_cookies'
+require 'timecop'
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
@@ -45,5 +47,6 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
+  config.include ShowMeTheCookies, type: :feature
   config.include Trestle::Auth::Test::LoginHelpers, type: :feature
 end

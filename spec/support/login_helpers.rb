@@ -7,6 +7,7 @@ module Trestle
 
           fill_in "Email", with: email
           fill_in "Password", with: password
+          fill_in "Token", width: "123123"
           check "Remember me" if remember_me
 
           click_button "Login"

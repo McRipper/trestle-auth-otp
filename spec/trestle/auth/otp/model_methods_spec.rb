@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Trestle::Auth::ModelMethods do
+describe Trestle::Auth::Otp::ModelMethods do
   subject(:model) { Administrator }
 
   describe ".authenticate" do

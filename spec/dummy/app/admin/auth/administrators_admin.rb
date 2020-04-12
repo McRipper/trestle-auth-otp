@@ -1,4 +1,4 @@
-Trestle.resource(:administrators, model: Trestle.config.auth.user_class, scope: Auth) do
+Trestle.resource(:administrators, model: Administrator, scope: Auth) do
   menu do
     group :configuration, priority: :last do
       item :administrators, icon: "fa fa-users"
@@ -10,6 +10,7 @@ Trestle.resource(:administrators, model: Trestle.config.auth.user_class, scope: 
       avatar_for(administrator)
     end
     column :email, link: true
+    column :otp_module, header: 'OTP'
     column :first_name
     column :last_name
     actions do |a|
@@ -18,6 +19,11 @@ Trestle.resource(:administrators, model: Trestle.config.auth.user_class, scope: 
   end
 
   form do |administrator|
+
+    sidebar do
+      render 'qr_code' if administrator.persisted?
+    end
+
     text_field :email
 
     row do
@@ -29,5 +35,8 @@ Trestle.resource(:administrators, model: Trestle.config.auth.user_class, scope: 
       col(sm: 6) { password_field :password }
       col(sm: 6) { password_field :password_confirmation }
     end
+
+    check_box :otp_module, label: 'Enable OTP'
+
   end
 end
