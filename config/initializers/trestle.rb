@@ -1,7 +1,7 @@
 Trestle.configure do |config|
 
-  config.hook('auth.login.form') do
-    render 'trestle/auth/otp'
+  config.hook('auth.login.form') do |f|
+    render partial: 'trestle/auth/otp', locals: { f: f }
   end
 
   config.auth.authenticate = ->(params) {
