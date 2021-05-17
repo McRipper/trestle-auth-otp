@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "trestle", "~> 0.9.0"
   spec.add_dependency "trestle-auth",  "~> 0.4.0"
   spec.add_dependency "active_model_otp", "~> 2.0"
-  spec.add_dependency "rqrcode", "~> 1.1"
+  spec.add_dependency "rqrcode", "~> 2.0"
 
   spec.add_development_dependency "rspec-rails",         "~> 3.0"
   spec.add_development_dependency "show_me_the_cookies", "~> 5.0"

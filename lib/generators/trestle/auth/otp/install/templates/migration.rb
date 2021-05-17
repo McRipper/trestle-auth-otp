@@ -1,4 +1,4 @@
-class AddOtpFields < ActiveRecord::Migration[6.0]
+class AddOtpFields < ActiveRecord::Migration[]
   def up
     add_column :administrators, :otp_secret_key, :string
     add_column :administrators, :otp_module, :boolean, default: false
