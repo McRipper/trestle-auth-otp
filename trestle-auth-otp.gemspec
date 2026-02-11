@@ -20,8 +20,8 @@ Gem::Specification.new do |spec|
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/McRipper/trestle-auth-otp"
 
-  spec.add_dependency "trestle", "~> 0.9.0"
-  spec.add_dependency "trestle-auth",  "~> 0.4.0"
+  spec.add_dependency "trestle", "~> 0.10"
+  spec.add_dependency "trestle-auth",  "~> 0.5"
   spec.add_dependency "active_model_otp", "~> 2.0"
   spec.add_dependency "rqrcode", "~> 2.0"
 

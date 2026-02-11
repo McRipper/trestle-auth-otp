@@ -14,3 +14,8 @@
 /spec/dummy/tmp/*
 
 *.gem
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/trestle-auth-otp.iml
+/.idea/vcs.xml
+/.idea/workspace.xml

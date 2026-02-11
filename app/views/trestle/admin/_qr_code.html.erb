@@ -1,15 +1,22 @@
-<%- @qr = RQRCode::QRCode.new(@instance.provisioning_uri("#{Trestle.config.site_title} (#{@instance.email})"), size: 10, level: :h) %>
+<!--size: 12 gives more capacity than the default that’s currently capping at 976.-->
+<!--level: :l increases capacity further (lowest error correction, usually fine for on-screen QR).-->
+<%- @qr =
+      RQRCode::QRCode.new(
+        @instance.provisioning_uri("#{Trestle.config.site_title} (#{@instance.email})"),
+        size: 12,
+        level: :l)
+%>
 
 <div class="text-center">
   <p><strong>Scan with Google Authenticator</strong></p>
 
   <%= @qr.as_svg(
-    offset: 0,
-    color: '000',
-    shape_rendering: 'crispEdges',
-    module_size: 4,
-    standalone: true
-  ).html_safe %>
+        offset: 0,
+        color: '000',
+        shape_rendering: 'crispEdges',
+        module_size: 4,
+        standalone: true
+      ).html_safe %>
 
   <small class="my-2">
     <%= @instance.otp_secret_key %>
