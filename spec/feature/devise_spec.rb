@@ -1,9 +1,10 @@
 require "rails_helper"
 
 feature "Authentication with Devise backend" do
-  before(:all) do
+  before(:each) do
     Trestle.config.auth.backend = :devise
     Trestle.config.auth.warden.scope = :devise_user
+    Trestle.config.auth.user_class = -> { DeviseUser }
   end
 
   before(:each) do

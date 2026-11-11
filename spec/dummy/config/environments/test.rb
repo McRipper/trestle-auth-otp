@@ -4,6 +4,10 @@
 # and recreated between test runs. Don't rely on the data there!
 
 Rails.application.configure do
+  # Fixture keys only. Applications provide their own credentials/ENV keys.
+  config.active_record.encryption.primary_key = "otp-test-primary-key-32-characters"
+  config.active_record.encryption.deterministic_key = "otp-test-deterministic-key-32-chars"
+  config.active_record.encryption.key_derivation_salt = "otp-test-key-derivation-salt"
   # Settings specified here will take precedence over those in config/application.rb.
 
   config.cache_classes = false
@@ -30,10 +34,10 @@ Rails.application.configure do
   config.cache_store = :null_store
 
   # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
+  config.action_dispatch.show_exceptions = :rescuable
 
   # Disable request forgery protection in test environment.
-  config.action_controller.allow_forgery_protection = false
+  config.action_controller.allow_forgery_protection = ENV["OTP_BROWSER"] == "1"
 
   # Store uploaded files on the local file system in a temporary directory.
   # config.active_storage.service = :test

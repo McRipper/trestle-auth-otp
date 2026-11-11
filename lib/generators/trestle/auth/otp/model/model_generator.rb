@@ -8,7 +8,9 @@ module Trestle
           argument :name, type: :string, default: "Administrator"
 
           def inject_model_methods
-            inject_into_file "app/models/#{name.underscore}.rb", "  include Trestle::Auth::Otp::ModelMethods\n", before: /^end/
+            path = "app/models/#{name.underscore}.rb"
+            return if File.read(path).include?("include Trestle::Auth::Otp::ModelMethods")
+            inject_into_class path, name, "  include Trestle::Auth::Otp::ModelMethods\n"
           end
         end
       end

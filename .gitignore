@@ -8,6 +8,7 @@
 /spec/reports/
 /tmp/
 /node_modules/
+/output/
 /spec/dummy/db/*.sqlite3
 /spec/dummy/*.sqlite3-journal
 /spec/dummy/log/*.log

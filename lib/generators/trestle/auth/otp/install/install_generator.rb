@@ -27,21 +27,19 @@ module Trestle
           end
 
           def generate_model
-            generate "trestle:auth:otp:model", model unless devise?
+            generate "trestle:auth:otp:model", model
           end
 
           def generate_admin
-            generate "trestle:auth:otp:admin", model, ("--devise" if devise?)
+            generate "trestle:auth:otp:admin", model, *("--devise" if devise?)
           end
 
           def generate_migration
-            filename = 'migration.rb'
-            path = File.expand_path(find_in_source_paths(filename.to_s))
-            text = File.read(path)
-            content = text.gsub('[]', "[#{ActiveRecord::Migration.current_version}]")
-            File.open(path, "w") { |file| file << content }
+            migration_template("migration.rb.erb", "db/migrate/add_otp_fields_to_#{table_name}.rb")
+          end
 
-            migration_template(filename, "db/migrate/add_otp_fields.rb")
+          def encryption_notice
+            say "Configure Rails Active Record encryption keys before enabling OTP (rails db:encryption:init)."
           end
 
           def devise?
@@ -54,6 +52,11 @@ module Trestle
           end
 
         private
+          def table_name
+            klass = model.safe_constantize
+            klass && klass.respond_to?(:table_name) ? klass.table_name : model.demodulize.tableize
+          end
+
           def format_configuration(source)
             "\n#{source.indent(2)}\n"
           end

@@ -3,4 +3,5 @@ class DeviseUser < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+  include Trestle::Auth::Otp::ModelMethods
 end

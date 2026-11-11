@@ -1,0 +1,17 @@
+<div class="login-form">
+  <header class="auth-header"><h1><%= t("admin.otp.enrollment_title") %></h1></header>
+  <% if @otp_error %><div class="alert alert-danger" role="alert"><%= @otp_error %></div><% end %>
+  <p><%= t("admin.otp.scan_hint") %></p>
+  <div class="text-center my-3 bg-white p-3 rounded" role="img" aria-label="<%= t("admin.otp.qr_label") %>">
+    <%= RQRCode::QRCode.new(@otp_uri).as_svg(module_size: 4, standalone: true).html_safe %>
+  </div>
+  <details class="mb-3">
+    <summary><%= t("admin.otp.manual_key") %></summary>
+    <code class="d-block mt-2 text-break text-white"><%= @otp_enrollment["otp_secret_key"] %></code>
+  </details>
+  <%= form_with url: otp_enable_path, local: true, data: { turbo: false } do %>
+    <%= render "trestle/auth/otp" %>
+    <%= submit_tag t("admin.otp.enable"), class: "btn btn-primary d-block w-100" %>
+  <% end %>
+  <p class="mt-3"><%= link_to t("admin.otp.cancel"), otp_settings_path, class: "link-light" %></p>
+</div>

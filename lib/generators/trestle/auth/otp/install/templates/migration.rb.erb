@@ -1,0 +1,11 @@
+class AddOtpFieldsTo<%= table_name.camelize %> < ActiveRecord::Migration[<%= ActiveRecord::Migration.current_version %>]
+  def change
+    add_column :<%= table_name %>, :otp_secret_key, :text
+    add_column :<%= table_name %>, :otp_module, :boolean, default: false, null: false
+    add_column :<%= table_name %>, :otp_last_used_at, :bigint
+    add_column :<%= table_name %>, :otp_recovery_codes_digest, :text, default: "[]", null: false
+    add_column :<%= table_name %>, :otp_session_token, :string
+    add_column :<%= table_name %>, :otp_failed_attempts, :integer, default: 0, null: false
+    add_column :<%= table_name %>, :otp_locked_until, :datetime
+  end
+end

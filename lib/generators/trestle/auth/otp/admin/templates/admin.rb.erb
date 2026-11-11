@@ -40,8 +40,6 @@ Trestle.resource(:<%= plural_name %>, model: <%= model %>, scope: Auth) do
       col(sm: 6) { password_field :password_confirmation }
     end
 
-    check_box :otp_module, label: 'Enable OTP'
-
   end
   <%- if devise? -%>
 

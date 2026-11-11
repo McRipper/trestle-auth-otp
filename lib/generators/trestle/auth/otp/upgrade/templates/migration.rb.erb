@@ -1,0 +1,15 @@
+class SecureOtpFor<%= table_name.camelize %> < ActiveRecord::Migration[<%= ActiveRecord::Migration.current_version %>]
+  def up
+    change_column :<%= table_name %>, :otp_secret_key, :text
+    change_column_null :<%= table_name %>, :otp_module, false, false
+    add_column :<%= table_name %>, :otp_last_used_at, :bigint
+    add_column :<%= table_name %>, :otp_recovery_codes_digest, :text, default: "[]", null: false
+    add_column :<%= table_name %>, :otp_session_token, :string
+    add_column :<%= table_name %>, :otp_failed_attempts, :integer, default: 0, null: false
+    add_column :<%= table_name %>, :otp_locked_until, :datetime
+  end
+
+  def down
+    raise ActiveRecord::IrreversibleMigration, "OTP security state must not be discarded automatically"
+  end
+end
