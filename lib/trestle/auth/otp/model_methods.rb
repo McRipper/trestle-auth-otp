@@ -6,8 +6,7 @@ module Trestle
         SECURITY_ATTRIBUTES = %w[otp_secret_key otp_module otp_last_used_at
           otp_recovery_codes_digest otp_session_token otp_failed_attempts otp_locked_until].freeze
 
-        # active_model_otp includes its own implementation into the model. Prepend
-        # this guard so that no caller can fall back to its reusable verifier.
+        # Keep verification ahead of methods introduced by other model concerns.
         module Verification
           def authenticate_otp(code, options = {})
             otp_attempt do
@@ -20,10 +19,28 @@ module Trestle
         included do
           # Read legacy plaintext during the documented upgrade; all writes encrypt.
           encrypts :otp_secret_key, support_unencrypted_data: true
-          has_one_time_password if: :otp_module?
           prepend Verification
           before_validation :initialize_otp_session_token, on: :create
           validate :otp_attributes_are_managed
+        end
+
+        class_methods do
+          # Preserve the existing helper's byte-length argument (160 bits by default).
+          def otp_random_secret(length = 20)
+            ROTP::Base32.random(length)
+          end
+        end
+
+        # Retain the TOTP helpers used by existing integrations without installing
+        # active_model_otp's global macros, automatic secrets or reusable verifier.
+        def otp_code(options = {})
+          time = options.is_a?(Hash) ? options.fetch(:time, Time.now) : options
+          ROTP::TOTP.new(otp_secret_key).at(time)
+        end
+
+        def provisioning_uri(account = nil, options = {})
+          account ||= respond_to?(:email) ? email : ""
+          ROTP::TOTP.new(otp_secret_key, options).provisioning_uri(account)
         end
 
         def otp_session_signature

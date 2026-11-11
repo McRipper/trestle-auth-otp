@@ -1,7 +1,18 @@
 # Trestle Authentication One Time Password
 
 Authenticator-app verification and single-use recovery codes for Trestle 0.10.1
-and trestle-auth 0.5.0, using Active Record 7.1+ and Ruby 3.1+.
+and trestle-auth 0.5.0, using Active Record >= 7.1 and < 9, and Ruby 3.2+.
+
+The supported dependency series are ROTP 6.4, RQRCode 3.2 and rqrcode_core 2.1
+(with compatible updates below their next major versions). The plugin uses ROTP
+directly and no longer depends on `active_model_otp`, whose released 2.3.4 version
+restricts ROTP to 6.3.x. `otp_random_secret`, `otp_code` (including explicit times)
+and `provisioning_uri` remain available on OTP-enabled models. If an application
+declares `active_model_otp` separately, that dependency must also be migrated or
+updated before Bundler can resolve ROTP 6.4. Its global `has_one_time_password`
+macro and optional HOTP/backup-code APIs are not supplied by this plugin.
+This dependency update does not require an additional schema migration or
+regeneration of secrets for applications already using the 0.3.0 schema.
 
 ## Install
 
@@ -113,7 +124,7 @@ MFA reset endpoint.
 ## Development
 
 `bundle exec rspec` runs model, feature, HTTP, CSRF and generator tests. The CI
-uses Ruby 3.3/3.4 with Rails 8.1 and Sprockets/Propshaft. The model tests exercise
+uses Ruby 3.2/3.3/3.4 with Rails 8.1 and Sprockets/Propshaft. The model tests exercise
 stale instances; the explicit concurrency check uses an isolated PostgreSQL
 database whose name begins with `trestle_otp_test`:
 

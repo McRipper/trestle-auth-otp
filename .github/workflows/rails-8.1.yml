@@ -8,7 +8,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ['3.3', '3.4']
+        ruby: ['3.2', '3.3', '3.4']
         assets: [sprockets-rails, propshaft]
     env:
       ASSET_PIPELINE: ${{ matrix.assets }}

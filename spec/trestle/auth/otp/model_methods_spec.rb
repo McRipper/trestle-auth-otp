@@ -8,6 +8,37 @@ describe Trestle::Auth::Otp::ModelMethods do
     expect(user.otp_secret_key).to be_nil
   end
 
+  it "generates independent 160-bit Base32 secrets and retains custom byte lengths" do
+    secret = Administrator.otp_random_secret
+    expect(secret).to match(/\A[A-Z2-7]{32}\z/i)
+    expect(Administrator.otp_random_secret).not_to eq(secret)
+    expect(Administrator.otp_random_secret(10)).to match(/\A[A-Z2-7]{16}\z/i)
+  end
+
+  it "retains time-based code helpers using the RFC 6238 SHA1 test secret" do
+    account = Administrator.new(otp_secret_key: "GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ")
+    # The RFC's 8-digit vector at 59 seconds is 94287082; this plugin uses 6 digits.
+    Timecop.freeze(Time.at(59).utc) do
+      expect(account.otp_code).to eq("287082")
+      expect(account.otp_code(time: Time.current)).to eq("287082")
+      expect(account.otp_code(Time.current)).to eq("287082")
+    end
+  end
+
+  it "preserves provisioning account and issuer options for existing integrations" do
+    secret = Administrator.otp_random_secret
+    account = Administrator.new(email: "alice@example.test", otp_secret_key: secret)
+    uri = URI.parse(account.provisioning_uri)
+    expect(uri.scheme).to eq("otpauth")
+    expect(uri.host).to eq("totp")
+    expect(URI.decode_www_form_component(uri.path.delete_prefix("/"))).to eq(account.email)
+    expect(URI.decode_www_form(uri.query).to_h.fetch("secret")).to eq(secret)
+
+    uri = URI.parse(account.provisioning_uri("other@example.test", issuer: "Trestle Demo"))
+    expect(URI.decode_www_form_component(uri.path.delete_prefix("/"))).to eq("Trestle Demo:other@example.test")
+    expect(URI.decode_www_form(uri.query).to_h.fetch("issuer")).to eq("Trestle Demo")
+  end
+
   it "requires a valid code to activate and encrypts the secret" do
     secret = Administrator.otp_random_secret
     signature = user.otp_session_signature

@@ -31,6 +31,10 @@ RSpec.describe "OTP settings", type: :request do
 
   it "enables only after confirmation, shows codes once and hides the secret afterwards" do
     secret = start_setup
+    qr = Nokogiri::HTML(response.body).at_css("svg")
+    expect(qr).not_to be_nil
+    expect(qr["xmlns"]).to eq("http://www.w3.org/2000/svg")
+    expect(qr.css("path, rect")).not_to be_empty
     expect(user.reload.otp_module?).to be false
     expect(response.headers["Cache-Control"]).to include("no-store")
     post "/admin/otp/enable", params: {otp_code_token: "invalid"}

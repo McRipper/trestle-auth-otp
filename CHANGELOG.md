@@ -18,5 +18,8 @@
 - Add English/Italian screens with paste/autofill support and mobile-friendly fields.
 - Fix generator template mutation, model-specific table selection and Devise model
   installation. Add a migration generator for existing installations.
-- Require Ruby 3.1+, Active Record 7.1+, Trestle 0.10.1 and trestle-auth 0.5.0.
+- Replace active_model_otp with direct ROTP integration, retaining random-secret,
+  code-generation and provisioning-URI helpers. Existing enrolled secrets stay valid.
+- Require ROTP >= 6.4 and < 7, RQRCode >= 3.2 and < 4, and rqrcode_core >= 2.1 and < 3.
+- Require Ruby 3.2+, Active Record >= 7.1 and < 9, Trestle 0.10.1 and trestle-auth 0.5.0.
   See README for the required migration and legacy-secret encryption steps.
