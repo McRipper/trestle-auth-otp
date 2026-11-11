@@ -1,0 +1,9 @@
+<div class="login-form">
+  <header class="auth-header"><h1><%= t("admin.otp.save_recovery") %></h1></header>
+  <p><%= t("admin.otp.save_recovery_hint") %></p>
+  <ul class="list-unstyled font-monospace" aria-label="<%= t("admin.otp.recovery_list") %>">
+    <% @recovery_codes.each do |code| %><li class="mb-2"><code class="text-white"><%= code %></code></li><% end %>
+  </ul>
+  <p class="small"><%= t("admin.otp.sessions_revoked") %></p>
+  <%= link_to t("admin.otp.done"), otp_settings_path, class: "btn btn-primary d-block w-100" %>
+</div>

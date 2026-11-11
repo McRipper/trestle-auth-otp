@@ -36,7 +36,5 @@ Trestle.resource(:administrators, model: Administrator, scope: Auth) do
       col(sm: 6) { password_field :password_confirmation }
     end
 
-    check_box :otp_module, label: 'Enable OTP'
-
   end
 end

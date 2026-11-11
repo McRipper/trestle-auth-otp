@@ -1,0 +1,45 @@
+<div class="login-form">
+  <header class="auth-header"><h1><%= t("admin.otp.settings_title") %></h1></header>
+  <% if @otp_error || flash[:error] %><div class="alert alert-danger" role="alert"><%= @otp_error || flash[:error] %></div><% end %>
+  <% if current_user.otp_module? %>
+    <p><strong><%= t("admin.otp.enabled") %></strong></p>
+    <p><%= t("admin.otp.remaining", count: current_user.otp_recovery_codes_remaining) %></p>
+    <%= tag.details(open: @otp_section == :recovery, class: "my-4") do %>
+    <summary class="h5"><%= t("admin.otp.replace_recovery") %></summary>
+    <p class="small"><%= t("admin.otp.replace_hint") %></p>
+    <%= form_with url: otp_recovery_codes_path, local: true, data: { turbo: false } do %>
+      <div class="mb-3">
+        <%= hidden_field_tag :username, current_user.email, autocomplete: "username" %>
+        <%= label_tag :recovery_password, t("admin.otp.current_password"), class: "form-label" %>
+        <div class="input-group"><%= password_field_tag :password, nil, id: :recovery_password, autocomplete: "current-password", required: true, class: "form-control" %></div>
+      </div>
+      <%= render "trestle/auth/otp", recovery: true, code_id: "recovery_otp_code" %>
+      <%= submit_tag t("admin.otp.replace_recovery"), class: "btn btn-primary" %>
+    <% end %>
+    <% end %>
+    <hr class="my-4">
+    <%= tag.details(open: @otp_section == :disable, class: "my-4") do %>
+    <summary class="h5"><%= t("admin.otp.disable") %></summary>
+    <%= form_with url: otp_settings_path, method: :delete, local: true, data: { turbo: false } do %>
+      <div class="mb-3">
+        <%= hidden_field_tag :username, current_user.email, autocomplete: "username" %>
+        <%= label_tag :disable_password, t("admin.otp.current_password"), class: "form-label" %>
+        <div class="input-group"><%= password_field_tag :password, nil, id: :disable_password, autocomplete: "current-password", required: true, class: "form-control" %></div>
+      </div>
+      <%= render "trestle/auth/otp", recovery: true, code_id: "disable_otp_code" %>
+      <%= submit_tag t("admin.otp.disable"), class: "btn btn-danger" %>
+    <% end %>
+    <% end %>
+  <% else %>
+    <p><%= t("admin.otp.setup_intro") %></p>
+    <%= form_with url: otp_setup_path, local: true, data: { turbo: false } do %>
+      <div class="mb-3">
+        <%= hidden_field_tag :username, current_user.email, autocomplete: "username" %>
+        <%= label_tag :setup_password, t("admin.otp.current_password"), class: "form-label" %>
+        <div class="input-group"><%= password_field_tag :password, nil, id: :setup_password, autocomplete: "current-password", required: true, class: "form-control" %></div>
+      </div>
+      <%= submit_tag t("admin.otp.start_setup"), class: "btn btn-primary" %>
+    <% end %>
+  <% end %>
+  <p class="mt-4"><%= link_to t("admin.otp.back"), Trestle.config.path, class: "link-light" %></p>
+</div>

@@ -19,8 +19,14 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 
 RSpec.configure do |config|
+  config.before do
+    Trestle.config.auth.backend = :basic
+    Trestle.config.auth.user_class = -> { Administrator }
+    Trestle.config.auth.user_scope = -> { Trestle.config.auth.user_class }
+    Trestle.config.auth.warden.scope = :devise_user
+  end
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.fixture_paths = ["#{::Rails.root}/spec/fixtures"]
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false

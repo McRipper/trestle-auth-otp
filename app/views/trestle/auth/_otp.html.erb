@@ -1,8 +1,12 @@
-<div class="form-group">
+<% recovery = local_assigns.fetch(:recovery, false) %>
+<% code_id = local_assigns.fetch(:code_id, "otp_code_token") %>
+<div class="form-group mb-3">
+  <%= label_tag code_id, t(recovery ? "admin.otp.code_or_recovery" : "admin.otp.code_label"), class: "form-label" %>
   <div class="input-group">
-    <div class="input-group-prepend">
-      <span class="input-group-text"><i class="fa fa-lock fa-fw"></i></span>
-    </div>
-    <%= f.text_field :otp_code_token, placeholder: 'Token', class: 'form-control' %>
+    <%= text_field_tag :otp_code_token, nil, id: code_id, class: "form-control font-monospace",
+    autocomplete: "one-time-code", inputmode: recovery ? "text" : "numeric",
+    maxlength: recovery ? 32 : 7, required: true, spellcheck: false,
+      autocapitalize: "off", aria: { describedby: "#{code_id}_hint" } %>
   </div>
+  <small id="<%= code_id %>_hint" class="form-text text-white"><%= t(recovery ? "admin.otp.recovery_hint" : "admin.otp.code_hint") %></small>
 </div>

@@ -1,0 +1,12 @@
+<div class="login-form">
+  <header class="auth-header"><h1><%= t("admin.otp.verify_title") %></h1></header>
+  <% if @otp_error %><div class="alert alert-danger" role="alert"><%= @otp_error %></div><% end %>
+  <% recovery = params[:recovery] == "1" %>
+  <%= form_with url: otp_challenge_path, local: true, data: { turbo: false } do %>
+    <%= hidden_field_tag :recovery, "1" if recovery %>
+    <%= render "trestle/auth/otp", recovery: recovery %>
+    <%= submit_tag t("admin.otp.verify"), class: "btn btn-primary d-block w-100" %>
+  <% end %>
+  <p class="mt-3"><%= link_to t(recovery ? "admin.otp.use_app" : "admin.otp.use_recovery"), otp_challenge_path(recovery: recovery ? nil : "1"), class: "link-light" %></p>
+  <%= button_to t("admin.otp.cancel"), otp_challenge_path, method: :delete, class: "btn btn-link link-light p-0", data: { turbo: false } %>
+</div>
