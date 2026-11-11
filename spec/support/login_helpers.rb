@@ -2,12 +2,12 @@ module Trestle
   module Auth
     module Test
       module LoginHelpers
-        def login(email: "admin@example.com", password: "password", remember_me: false)
+        def login(email: "admin@example.com", password: "password", remember_me: false, otp_code: nil)
           visit "/admin/login"
 
           fill_in "Email", with: email
           fill_in "Password", with: password
-          fill_in "Token", width: "123123"
+          fill_in "Token", with: otp_code if otp_code
           check "Remember me" if remember_me
 
           click_button "Login"

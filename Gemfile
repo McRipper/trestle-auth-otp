@@ -1,18 +1,16 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in trestle-auth.gemspec
-gemspec
+gem 'rails', '~> 8.1.0'
+gem ENV.fetch('ASSET_PIPELINE', 'sprockets-rails')
+gem 'trestle', github: 'TrestleAdmin/trestle', branch: 'main'
+gem 'trestle-auth', github: 'TrestleAdmin/trestle-auth', branch: 'main'
+gem 'rake', '~> 13.0'
 
 group :test do
-  gem "coveralls", require: false
-
-  gem "capybara"
-  gem "sqlite3", "~> 1.4"
-  gem "devise"
+  gem 'coveralls_reborn', require: false
+  gem 'capybara'
+  gem 'sqlite3', '>= 2.1'
+  gem 'devise'
 end
 
-gem "sassc-rails"
-
-gem "rake", "~> 12.0"
-
-gem "trestle", github: "TrestleAdmin/trestle"
+gemspec
